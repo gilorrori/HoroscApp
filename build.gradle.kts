@@ -5,4 +5,5 @@ plugins {
     alias(libs.plugins.dagger.hilt) apply false
     alias(libs.plugins.safe.args) apply false
     alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.secrets) apply false
 }

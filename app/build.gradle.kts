@@ -1,12 +1,25 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.safe.args)
+    alias(libs.plugins.secrets)
+}
+
+secrets {
+    propertiesFileName = "keystore.properties"
 }
 
 android {
+    /*Accediendo al campo del properties desde el gradle y no desde las clases*/
+    val localProperties = Properties().load(FileInputStream(secrets.propertiesFileName))
+    //localProperties.getProperty("TEST"))
+
+
     namespace = "com.gilorroristore.horoscapplication"
     compileSdk {
         version = release(36)
