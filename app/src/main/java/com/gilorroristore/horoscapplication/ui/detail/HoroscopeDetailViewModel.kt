@@ -2,6 +2,7 @@ package com.gilorroristore.horoscapplication.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeModel
 import com.gilorroristore.horoscapplication.domain.usecase.GetPredictionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,7 @@ class HoroscopeDetailViewModel @Inject constructor(private val getPredictionUseC
     private var _state = MutableStateFlow<HoroscopeDetailState>(HoroscopeDetailState.Loading)
     val state: StateFlow<HoroscopeDetailState> = _state
 
-    fun getHoroscope (sign: String){
+    fun getHoroscope (horoscopeModel: HoroscopeModel){
 
         //sino se pone ningun Dispatcher por defecto es el hilo principal viewModelScope.launch(Dispatchers.IO)
         viewModelScope.launch {
@@ -26,10 +27,10 @@ class HoroscopeDetailViewModel @Inject constructor(private val getPredictionUseC
             // Hilo principal
 
             withContext(Dispatchers.IO) {
-                val result = getPredictionUseCase(sign)
+                val result = getPredictionUseCase(horoscopeModel.name)
 
                 if (result!= null){
-                    _state.value = HoroscopeDetailState.Success( result.horoscope, result.sign, result.icon)
+                    _state.value = HoroscopeDetailState.Success( result.horoscope, result.sign, horoscopeModel)
                 } else{
                     _state.value = HoroscopeDetailState.Error("Error encontrado")
                 }

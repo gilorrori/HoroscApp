@@ -9,7 +9,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navArgs
 import com.bumptech.glide.Glide
+import com.gilorroristore.horoscapplication.R
 import com.gilorroristore.horoscapplication.databinding.ActivityHoroscopeDetailBinding
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -41,7 +43,7 @@ class HoroscopeDetailActivity : AppCompatActivity() {
     }
 
     private fun getPrediction() {
-        horoscopeDetailViewModel.getHoroscope(args.type.name)
+        horoscopeDetailViewModel.getHoroscope(args.type)
     }
 
     private fun initUIState() {
@@ -65,8 +67,23 @@ class HoroscopeDetailActivity : AppCompatActivity() {
     private fun stateSuccess(success: HoroscopeDetailState.Success) {
         binding.pb.isVisible = false
         binding.tvTitle.text = success.sign
-        binding.tvBody.text= success.prediction
-        Glide.with(this).load(success.icon).into(binding.ivDetail)
+        binding.tvBody.text = success.prediction
+        //Glide.with(this).load(success.icon).into(binding.ivDetail)
+        val image = when (success.horoscopeModel) {
+            HoroscopeModel.Aries -> R.drawable.detail_aries
+            HoroscopeModel.Gemini -> R.drawable.detail_gemini
+            HoroscopeModel.Taurus -> R.drawable.detail_taurus
+            HoroscopeModel.Cancer -> R.drawable.detail_cancer
+            HoroscopeModel.Leo -> R.drawable.detail_leo
+            HoroscopeModel.Virgo -> R.drawable.detail_virgo
+            HoroscopeModel.Libra -> R.drawable.detail_libra
+            HoroscopeModel.Scorpio -> R.drawable.detail_scorpio
+            HoroscopeModel.Sagittarius -> R.drawable.detail_sagittarius
+            HoroscopeModel.Capricorn -> R.drawable.detail_capricorn
+            HoroscopeModel.Aquarius -> R.drawable.detail_aquarius
+            HoroscopeModel.Pisces -> R.drawable.detail_pisces
+        }
+        binding.ivDetail.setImageResource(image)
     }
 
     private fun stateError() {
