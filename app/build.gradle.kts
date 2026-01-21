@@ -111,4 +111,8 @@ dependencies {
     //UnitTesting
     testImplementation (libs.kotlintest.runner.junit5)
     testImplementation (libs.mockk)
+
+    // Glide
+    implementation(libs.glide)
+    implementation (libs.compiler)
 }
