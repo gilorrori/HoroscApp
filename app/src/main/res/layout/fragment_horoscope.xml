@@ -11,9 +11,10 @@
         android:id="@+id/rvHoroscope"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:padding="12dp"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
         tools:listitem="@layout/item_horoscope"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

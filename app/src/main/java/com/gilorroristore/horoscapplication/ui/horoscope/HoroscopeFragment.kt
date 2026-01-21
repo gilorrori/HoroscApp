@@ -9,7 +9,22 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.gilorroristore.horoscapplication.databinding.FragmentHoroscopeBinding
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Aquarius
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Aries
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Cancer
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Capricorn
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Gemini
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Leo
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Libra
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Pisces
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Sagittarius
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Scorpio
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Taurus
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeInfo.Virgo
+import com.gilorroristore.horoscapplication.domain.model.HoroscopeModel
 import com.gilorroristore.horoscapplication.ui.horoscope.adapter.HoroscopeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -38,8 +53,9 @@ class HoroscopeFragment : Fragment() {
     }
 
     private fun initUI() {
-        horoscopeAdapter = HoroscopeAdapter()
-
+        horoscopeAdapter = HoroscopeAdapter() {
+            initDetailHoroscope(it)
+        }
         binding.rvHoroscope.adapter = horoscopeAdapter
         initUIState()
     }
@@ -54,5 +70,28 @@ class HoroscopeFragment : Fragment() {
                 }
             }
         }
+    }
+
+
+    private fun initDetailHoroscope(horoscopeInfo: HoroscopeInfo) {
+        /**
+         * WARING: mandar objetos completos como param es mala práctica, antipattern
+         */
+        val type = when (horoscopeInfo) {
+            Aquarius -> HoroscopeModel.Aquarius
+            Aries -> HoroscopeModel.Aries
+            Cancer -> HoroscopeModel.Cancer
+            Capricorn -> HoroscopeModel.Capricorn
+            Gemini -> HoroscopeModel.Gemini
+            Leo -> HoroscopeModel.Leo
+            Libra -> HoroscopeModel.Libra
+            Pisces -> HoroscopeModel.Pisces
+            Sagittarius -> HoroscopeModel.Sagittarius
+            Scorpio -> HoroscopeModel.Scorpio
+            Taurus -> HoroscopeModel.Taurus
+            Virgo -> HoroscopeModel.Virgo
+        }
+
+        findNavController().navigate(HoroscopeFragmentDirections.actionHoroscopeFragmentToHoroscopeDetailActivity(type))
     }
 }
