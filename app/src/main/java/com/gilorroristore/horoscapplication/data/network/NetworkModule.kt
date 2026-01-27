@@ -2,11 +2,14 @@ package com.gilorroristore.horoscapplication.data.network
 
 import com.gilorroristore.horoscapplication.BuildConfig
 import com.gilorroristore.horoscapplication.data.RepositoryImpl
+import com.gilorroristore.horoscapplication.data.network.core.interceptors.AuthInterceptor
 import com.gilorroristore.horoscapplication.domain.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -16,11 +19,22 @@ import javax.inject.Singleton
 object NetworkModule {
 
 
+    @Provides
+    @Singleton
+    fun provideOkHttp(authInterceptor: AuthInterceptor): OkHttpClient{
+        val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        return OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .addInterceptor(authInterceptor)
+            .build()
+    }
+
     @Provides // Para poder proveer a este objeto de una clase o sdk externo
     @Singleton // Una sola instancia del objeto en tod o el ciclo de la app
-    fun provideRetrofit() : Retrofit{
+    fun provideRetrofit(okHttpClient: OkHttpClient) : Retrofit{
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -41,5 +55,4 @@ object NetworkModule {
     fun provideRepository(apiService: HoroscopeApiService) : Repository{
         return RepositoryImpl(apiService)
     }
-
 }
